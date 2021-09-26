@@ -12,7 +12,7 @@ export const getOptions = (options) => {
         },
         ...options
     };
-    
+
     if (!token) {
         token = jsCookie.get("token");
     }
@@ -24,13 +24,17 @@ export const getOptions = (options) => {
     return opts;
 };
 
-export const getTokenSource = ()  => {
+export const getTokenSource = () => {
     return axios.CancelToken.source();
 };
 
 export const cancelRequest = (source) => {
     source && source.cancel && source.cancel(ACTION_TYPE.UNMOUNT);
 };
+
+export const timeout = setTimeout(() => {
+    cancelRequest(getTokenSource());
+}, 3000)
 
 export const GET = (path, params, options = {}) => {
     const _params = params ? Object.keys(params).map(key => {
@@ -57,7 +61,7 @@ export const GET = (path, params, options = {}) => {
 export const POST = (path, params, options = {}) => {
     const _url = options.isFullPath ? path : Configs.BASE_API + path;
     const _options = getOptions(options);
-    
+
     return axios.post(_url, params, _options).then(response => response.data);
 };
 
@@ -70,9 +74,9 @@ export const PUT = (path, params, options = {}) => {
 export const DELETE = (path, params, options = {}) => {
     const _url = options.isFullPath ? path : Configs.BASE_API + path;
     const _options = getOptions(options);
-    
+
     // delete with params;
-    
+
     if (params) {
         _options.data = params;
     }

@@ -14,7 +14,7 @@ export default function FooterAdmin() {
                   href="https://www.rembacninh.vn"
                   className="text-blueGray-500 hover:text-blueGray-700 text-sm font-semibold py-1"
                 >
-                  Camera
+                  Rem VH
                 </a>
               </div>
             </div>
