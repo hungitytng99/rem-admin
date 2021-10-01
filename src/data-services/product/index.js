@@ -131,6 +131,7 @@ export const filterFieldProduct = (product) => {
         origin: product.origin || '',
         weight: product.weight || '',
         repeat_deg: product.repeat_deg || '',
+        unit_cost: product.unit_cost || '',
         feature: product.feature || '',
         thickness: product.thickness || '',
         size: product.size || '',

@@ -29,7 +29,7 @@ const CategoryDropdown = (props) => {
             "text-sm py-1 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
         >
-          Edit
+          Sửa
         </a>
       </Menu.Item>
       <Menu.Item key={2}>
@@ -39,7 +39,7 @@ const CategoryDropdown = (props) => {
           }
           onClick={() => showModal()}
         >
-          Delete
+          Xóa
         </div>
       </Menu.Item>
     </Menu>

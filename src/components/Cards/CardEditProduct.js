@@ -11,16 +11,9 @@ import draftjsToHtml from "draftjs-to-html";
 
 export default function CardEditProduct(props) {
     const { submitEditCategory, detailProduct = { data: { description: '' } } } = props;
-    const [categoryOption, setCategoryOption] = useState({ label: '', value: '' });
+    const [categoryOption, setCategoryOption] = useState([]);
     const [categorySelected, setCategorySelected] = useState({ label: '', value: '' });
-    const [shortDesc, setShortDesc] = useState(EditorState.createEmpty());
-    const [longDesc, setLongDesc] = useState(EditorState.createEmpty());
-    const onShortDescChange = (shortDesc) => {
-        setShortDesc(shortDesc);
-    }
-    const onLongDescChange = (shortDesc) => {
-        setLongDesc(shortDesc);
-    }
+
     const handleSubChange = categoryOption => {
         setCategorySelected(categoryOption);
     };
@@ -34,6 +27,8 @@ export default function CardEditProduct(props) {
         brand: Yup.string(),
         thickness: Yup.string(),
         material: Yup.string(),
+        unit_cost: Yup.number()
+            .required('Vui lòng nhập đúng giá bán (đơn vị: nghìn VNĐ/m2).'),
         weight: Yup.string(),
         feature: Yup.string(),
         repeat_deg: Yup.string(),
@@ -56,7 +51,7 @@ export default function CardEditProduct(props) {
     const formik = useFormik({
         initialValues: {
             name: '', model_number: '', origin: '', brand: 'Rèm Vương Hồng',
-            thickness: '', material: '', weight: '', feature: '', repeat_deg: '',
+            thickness: '', material: '', weight: '', feature: '', repeat_deg: '', unit_cost: '',
             main_image_url: '', url_image1: '', url_image2: '', url_image3: '', url_image4: '', url_image5: ''
         },
         onSubmit: (values) => {
@@ -77,6 +72,7 @@ export default function CardEditProduct(props) {
                 brand: values.brand,
                 thickness: values.thickness,
                 material: values.material,
+                unit_cost: values.unit_cost,
                 weight: values.weight,
                 feature: values.feature,
                 repeat_deg: values.repeat_deg,
@@ -109,6 +105,7 @@ export default function CardEditProduct(props) {
             formik.values.thickness = detailProduct.data.thickness;
             formik.values.material = detailProduct.data.material;
             formik.values.weight = detailProduct.data.weight;
+            formik.values.unit_cost = detailProduct.data.unit_cost;
             formik.values.feature = detailProduct.data.feature;
             formik.values.repeat_deg = detailProduct.data.repeat_deg;
             formik.values.main_image_url = detailProduct.data?.image[0].src;
@@ -118,15 +115,20 @@ export default function CardEditProduct(props) {
             formik.values.url_image4 = detailProduct.data?.image[4]?.src || '';
             formik.values.url_image5 = detailProduct.data?.image[5]?.src || '';
 
-
             // initial  category selected
+
+        }
+    }, [detailProduct])
+
+    useEffect(() => {
+        if (categoryOption.length > 0 && detailProduct.data && detailProduct.data.category_id) {
             let categoryTmp = categoryOption.filter((item) => {
                 if (item.value === detailProduct.data.category_id)
                     return item;
             })
             setCategorySelected(categoryTmp[0]);
         }
-    }, [detailProduct])
+    }, [categoryOption, detailProduct])
 
     return (
         <>
@@ -339,6 +341,28 @@ export default function CardEditProduct(props) {
                                     />
                                     {formik.touched.repeat_deg && formik.errors.repeat_deg ? (
                                         <div className="text-rose-600">{formik.errors.repeat_deg}</div>
+                                    ) : null}
+                                </div>
+                            </div>
+                            <div className="w-full lg:w-6/12 px-4">
+                                <div className="relative w-full mb-3">
+
+                                    <label
+                                        className="block uppercase text-blueGray-600 text-sm font-bold mb-2"
+                                    >
+                                        Giá bán (nghìn VNĐ/m2)
+                                    </label>
+                                    <input
+                                        type="number"
+                                        onChange={formik.handleChange}
+                                        value={formik.values.unit_cost}
+                                        autoComplete="off"
+                                        name="unit_cost"
+                                        className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                        placeholder="Giá bán (nghìn VNĐ/m2)"
+                                    />
+                                    {formik.touched.unit_cost && formik.errors.unit_cost ? (
+                                        <div className="text-rose-600">{formik.errors.unit_cost}</div>
                                     ) : null}
                                 </div>
                             </div>

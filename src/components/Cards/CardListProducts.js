@@ -62,6 +62,13 @@ export default function CardListProducts(props) {
                   Đặc tính
                 </th>
                 <th
+                  className={
+                    "px-3 align-middle border border-solid py-3 text-sm uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100"
+                  }
+                >
+                  Giá bán (nghìn VNĐ/m2)
+                </th>
+                <th
                   className="px-3 align-middle border border-solid py-3 text-sm uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left bg-blueGray-50 text-blueGray-500 border-blueGray-100"
                 >
                   Ảnh
@@ -111,6 +118,9 @@ export default function CardListProducts(props) {
                       </td>
                       <td className="border-t-0 px-3 py-3 align-middle border-l-0 border-r-0 text-sm">
                         {product.feature}
+                      </td>
+                      <td className="border-t-0 px-3 py-3 align-middle border-l-0 border-r-0 text-sm">
+                        {product.unit_cost}
                       </td>
                       <td className="border-t-0 px-3 py-3 align-middle border-l-0 border-r-0 text-sm">
                         <div className="flex flex-wrap">

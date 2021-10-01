@@ -37,6 +37,9 @@ export default function CardAddProducts() {
         weight: Yup.string(),
         feature: Yup.string(),
         repeat_deg: Yup.string(),
+        unit_cost: Yup.number()
+            .min(0, "Giá bán phải lớn hơn 0VNĐ")
+            .required('Vui lòng nhập đúng giá bán (đơn vị: nghìn VNĐ/m2).'),
         main_image_url: Yup.string()
             .required('Trường này không được để trống')
             .url('Trường này phải là một URL'),
@@ -85,12 +88,12 @@ export default function CardAddProducts() {
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                     <Formik
                         initialValues={{
-                            name: '', model_number: '', origin: '', brand: 'Rèm Vương Hồng',
+                            name: '', model_number: '', origin: '', brand: 'Rèm Vương Hồng', unit_cost: '',
                             thickness: '', material: '', weight: '', feature: '', repeat_deg: '',
                             main_image_url: '', url_image1: '', url_image2: '', url_image3: '', url_image4: '', url_image5: ''
                         }}
                         validationSchema={productSchema}
-                        onSubmit={async (values, {resetForm}) => {
+                        onSubmit={async (values, { resetForm }) => {
                             // same shape as initial values
                             let listImage = [values.main_image_url, values.url_image1, values.url_image2, values.url_image3, values.url_image4];
                             listImage = listImage.filter(image => {
@@ -109,6 +112,7 @@ export default function CardAddProducts() {
                                 weight: values.weight,
                                 feature: values.feature,
                                 repeat_deg: values.repeat_deg,
+                                unit_cost: values.unit_cost,
                                 category_id: categorySelected.value
                             }
                             console.log(params);
@@ -125,10 +129,10 @@ export default function CardAddProducts() {
                             console.log("RESPONSE: ", response);
                             if (response.state === REQUEST_STATE.ERROR) {
                                 let message = "Một lỗi đã xảy ra khi thêm sản phẩm";
-                                if( response.message.errno === 1062) {
+                                if (response.message.errno === 1062) {
                                     message = "Mã sản phẩm cho sản phẩm này đã tồn tại"
                                 }
-                                if( response.message.errno === 1366) {
+                                if (response.message.errno === 1366) {
                                     message = "Vui lòng chọn danh mục"
                                 }
                                 notification['error']({
@@ -295,6 +299,24 @@ export default function CardAddProducts() {
                                                 placeholder="Độ lặp" />
                                             {errors.repeat_deg && touched.repeat_deg ? (
                                                 <div className="text-rose-600">{errors.repeat_deg}</div>
+                                            ) : null}
+                                        </div>
+                                    </div>
+                                    <div className="w-full lg:w-6/12 px-4">
+                                        <div className="relative w-full mb-3">
+                                            <label
+                                                className="block uppercase text-blueGray-600 text-sm font-bold mb-2"
+                                            >
+                                                Giá bán (nghìn VND/m2) <span className="text-rose-600">*</span>
+                                            </label>
+                                            <Field
+                                                autoComplete="off"
+                                                name="unit_cost"
+                                                type="text"
+                                                className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                                                placeholder="Giá bán (nghìn VND/m2)" />
+                                            {errors.unit_cost && touched.unit_cost ? (
+                                                <div className="text-rose-600">{errors.unit_cost}</div>
                                             ) : null}
                                         </div>
                                     </div>
